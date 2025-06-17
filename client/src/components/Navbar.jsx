@@ -152,6 +152,7 @@ const Navbar = () => {
             className={`${
               open ? "flex" : "hidden"
             } absolute top-[60px] left-0 w-full bg-neutral-50 shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
+            style={{ zIndex: 1000 }}
           >
             <NavLink to="/" onClick={() => setOpen(false)}>
               Home
