@@ -3,7 +3,8 @@ import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { axios, setShowUserLogin, navigate, setUser } = useAppContext();
+  const { axios, setShowUserLogin, navigate, setUser, fetchUser } =
+    useAppContext();
 
   const [state, setState] = React.useState("login");
   const [name, setName] = React.useState("");
@@ -19,14 +20,17 @@ const Login = () => {
         password,
       });
       if (data.success) {
-        navigate("/");
-        setUser(data.user);
-        setShowUserLogin(false);
+        setTimeout(async () => {
+          await fetchUser();
+          navigate("/");
+          setShowUserLogin(false);
+          toast.success(data.message || "Logged in successfully!");
+        }, 100);
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
   return (

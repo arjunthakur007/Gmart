@@ -29,9 +29,13 @@ export const AppContextProvider = ({ children }) => {
       if (data.success) {
         setUser(data.user);
         setCartItems(data.user.cartItems);
+      } else {
+        setUser(null);
+        setCartItems({});
       }
     } catch (error) {
       setUser(null);
+      setCartItems({});
     }
   };
 
@@ -127,9 +131,11 @@ export const AppContextProvider = ({ children }) => {
   useEffect(() => {
     const updateCart = async () => {
       try {
-        const { data } = await axios.post("/api/cart/update", { cartItems });
-        if (!data.success) {
-          toast.error(data.message);
+        if (user) {
+          const { data } = await axios.post("/api/cart/update", { cartItems });
+          if (!data.success) {
+            toast.error(data.message);
+          }
         }
       } catch (error) {
         toast.error(error.message);
@@ -138,7 +144,7 @@ export const AppContextProvider = ({ children }) => {
     if (user) {
       updateCart();
     }
-  }, [cartItems]);
+  }, [cartItems, user]);
 
   const value = {
     navigate,
@@ -161,6 +167,7 @@ export const AppContextProvider = ({ children }) => {
     axios,
     fetchProducts,
     setCartItems,
+    fetchUser,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
