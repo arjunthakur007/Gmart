@@ -20,12 +20,20 @@ const Login = () => {
         password,
       });
       if (data.success) {
-        setTimeout(async () => {
-          await fetchUser();
-          navigate("/");
-          setShowUserLogin(false);
-          toast.success(data.message || "Logged in successfully!");
-        }, 100);
+        if (state === "register") {
+          toast.success("Signed up successfully! Please log in.");
+          setState("login");
+          setEmail("");
+          setPassword("");
+          setName("");
+        } else {
+          setTimeout(async () => {
+            await fetchUser();
+            navigate("/");
+            setShowUserLogin(false);
+            toast.success(data.message || "Logged in successfully!");
+          }, 100);
+        }
       } else {
         toast.error(data.message);
       }
